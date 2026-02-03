@@ -1,10 +1,11 @@
-// order.shipper.controller
+// order.shipper.controller.js
 const mongoose = require("mongoose");
 const orderService = require("../order.service");
+const { getClientInfo } = require("../../../../../utils/clientInfo");
 
 exports.getShipperInbox = async (req, res, next) => {
   try {
-    const data = await orderService.getShipperInboxService(req.query);
+    const data = await orderService.getShipperInboxService();
     return res.status(200).json({ success: true, data });
   } catch (e) {
     next(e);
@@ -50,7 +51,12 @@ exports.shipperMarkDelivered = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "orderId không hợp lệ" });
     }
 
-    const data = await orderService.shipperMarkDeliveredService(orderId, shipperId);
+    // ✅ lấy thiết bị thao tác
+    const client = getClientInfo(req);
+
+    // ✅ truyền ctx để service lưu vào PaymentTransaction.client
+    const data = await orderService.shipperMarkDeliveredService(orderId, shipperId, { client });
+
     return res.status(200).json({ success: true, data });
   } catch (e) {
     next(e);

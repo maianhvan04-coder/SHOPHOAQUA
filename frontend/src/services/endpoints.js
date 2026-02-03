@@ -111,6 +111,13 @@ export const endpoints = {
     getProductAuditDetail: (auditId) => `${v1Admin}/audit/products/${auditId}`,
   },
 
+  payments: {
+  // ADMIN
+  adminList: `${v1Admin}/payments`,   // GET /api/v1/admin/payments
+
+  // USER
+  my: `${v1}/payments/my`,            // GET /api/v1/payments/my
+  },
 
   upload: {
     signature: `${v1Admin}/upload/signature`,

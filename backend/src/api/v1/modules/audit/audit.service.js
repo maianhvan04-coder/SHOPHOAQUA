@@ -61,7 +61,6 @@ exports.logAudit = async ({
 }) => {
 
     if (!resource || !action) return;
-    console.log("Vào đến đây")
     const rawUA = req?.headers?.["user-agent"];
     const parser = new UAParser(rawUA);
     const ua = parser.getResult();

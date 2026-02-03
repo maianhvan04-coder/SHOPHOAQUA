@@ -23,6 +23,9 @@ const orderStaffRoute = require("../modules/order/routes/order.staff.routes");
 const orderShipperRoute = require("../modules/order/routes/order.shipper.routes");
 const orderDashboardRoute = require("../modules/order/routes/order.dashboard.routes");
 
+const paymentAdminRoute = require("../modules/payment/routes/paymentTransaction.admin.routes");
+const paymentUserRoute = require("../modules/payment/routes/paymentTransaction.user.routes");
+
 const dashboardAdminRoute = require("../modules/dashboard/routers/dashboard.route");
 
 const cartRouter = require("../modules/cart/cart.route");
@@ -49,9 +52,11 @@ module.exports = (app) => {
   app.use(v1 + "/admin/user", ...guard({ any: [PERMISSIONS.USER_READ] }), user);
   app.use(v1 + "/admin/category", ...guard({ any: [PERMISSIONS.CATEGORY_READ] }), categoryAdmin);
   app.use(v1 + "/admin/product", ...guard({ any: [PERMISSIONS.PRODUCT_READ] }), productAdmin);
-
+  app.use(v1 + "/admin/templates", ...guard({ any: [PERMISSIONS.PRODUCT_READ] }), templateDescriptionRouter);
   app.use(v1 + "/admin/upload", uploadRoutes);
   app.use(v1 + "/admin/order", ...guard({ any: [PERMISSIONS.ORDER_READ] }), orderAdminRoute);
+  app.use(v1 + "/admin/payments", ...guard({ any: [PERMISSIONS.ORDER_READ] }), paymentAdminRoute);
+
   // staff (xem đơn của mình + claim)
   app.use(v1 + "/staff/order", ...guard({
     any: [
@@ -98,4 +103,5 @@ module.exports = (app) => {
   app.use(v1 + "/feedback", feedbackRoute);
   app.use(v1 + "/upload", uploadFeedbackRoute);
   app.use(v1 + "/chat", chatRoutes);
+  app.use(v1 + "/payments", paymentUserRoute);
 };
