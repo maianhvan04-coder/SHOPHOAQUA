@@ -50,6 +50,10 @@ const AuditSecurity = lazy(() =>
 const AuditProductDetails = lazy(() =>
   import("~/features/audit/pages/ProductAuditDetailPage")
 );
+const AuditPayment = lazy(() =>
+  import("~/features/audit/pages/AuditPayment")
+);
+
 const ShipperInbox = lazy(() => import("~/features/order/pages/ShipperInboxPage"));
 const MyShipperOrders = lazy(() => import("~/features/order/pages/MyShipperOrdersPage"));
 export const adminRoutes = [
@@ -91,6 +95,7 @@ export const adminRoutes = [
         element: <AuditProductDetails />,
       },
       { path: "security", element: <AuditSecurity /> },
+      { path: "payment", element: <AuditPayment /> },
     ],
   },
 

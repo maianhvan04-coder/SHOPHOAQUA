@@ -101,8 +101,8 @@ const BASE_PERMISSIONS = Object.freeze({
     AUDIT_READ: "audit:read",
     AUDIT_PRODUCT_READ: "audit:product:read",
     AUDIT_PRODUCT_ROLLBACK: "audit:product:rollback",
-
     AUDIT_SECURITY_READ: "audit:security:read",
+    AUDIT_PAYMENT_READ: "audit:payment:read",
 
 });
 
@@ -430,14 +430,14 @@ const BASE_PERMISSION_META = Object.freeze({
         order: 306,
     },
 
-    // ===== ORDERS (STAFF) =====
+    // ===== STAFF =====
     [PERMISSIONS.ORDER_STAFF_INBOX_READ]: {
         key: PERMISSIONS.ORDER_STAFF_INBOX_READ,
         resource: "order",
         action: "inbox_read",
         label: "STAFF: Xem inbox đơn chưa gán",
-        groupKey: PERMISSION_GROUPS.ORDERS.key,
-        groupLabel: PERMISSION_GROUPS.ORDERS.label,
+        groupKey: PERMISSION_GROUPS.STAFF.key,
+        groupLabel: PERMISSION_GROUPS.STAFF.label,
         order: 360,
     },
     [PERMISSIONS.ORDER_STAFF_MY_READ]: {
@@ -445,8 +445,8 @@ const BASE_PERMISSION_META = Object.freeze({
         resource: "order",
         action: "mine_read",
         label: "STAFF: Xem đơn của tôi",
-        groupKey: PERMISSION_GROUPS.ORDERS.key,
-        groupLabel: PERMISSION_GROUPS.ORDERS.label,
+        groupKey: PERMISSION_GROUPS.STAFF.key,
+        groupLabel: PERMISSION_GROUPS.STAFF.label,
         order: 370,
     },
     [PERMISSIONS.ORDER_STAFF_CLAIM]: {
@@ -454,19 +454,19 @@ const BASE_PERMISSION_META = Object.freeze({
         resource: "order",
         action: "claim",
         label: "STAFF: Nhận (claim) đơn",
-        groupKey: PERMISSION_GROUPS.ORDERS.key,
-        groupLabel: PERMISSION_GROUPS.ORDERS.label,
+        groupKey: PERMISSION_GROUPS.STAFF.key,
+        groupLabel: PERMISSION_GROUPS.STAFF.label,
         order: 380,
     },
 
-    // ===== ORDERS (SHIPPER) =====
+    // ===== SHIPPER =====
     [PERMISSIONS.ORDER_SHIPPER_INBOX_READ]: {
         key: PERMISSIONS.ORDER_SHIPPER_INBOX_READ,
         resource: "order",
         action: "shipper_inbox_read",
         label: "SHIPPER: Xem inbox đơn chờ giao",
-        groupKey: PERMISSION_GROUPS.ORDERS.key,
-        groupLabel: PERMISSION_GROUPS.ORDERS.label,
+        groupKey: PERMISSION_GROUPS.SHIPPER.key,
+        groupLabel: PERMISSION_GROUPS.SHIPPER.label,
         order: 390,
     },
 
@@ -475,8 +475,8 @@ const BASE_PERMISSION_META = Object.freeze({
         resource: "order",
         action: "shipper_claim",
         label: "SHIPPER: Nhận đơn giao (claim)",
-        groupKey: PERMISSION_GROUPS.ORDERS.key,
-        groupLabel: PERMISSION_GROUPS.ORDERS.label,
+        groupKey: PERMISSION_GROUPS.SHIPPER.key,
+        groupLabel: PERMISSION_GROUPS.SHIPPER.label,
         order: 395,
     },
 
@@ -485,8 +485,8 @@ const BASE_PERMISSION_META = Object.freeze({
         resource: "order",
         action: "shipper_my_read",
         label: "SHIPPER: Xem đơn tôi đang giao",
-        groupKey: PERMISSION_GROUPS.ORDERS.key,
-        groupLabel: PERMISSION_GROUPS.ORDERS.label,
+        groupKey: PERMISSION_GROUPS.SHIPPER.key,
+        groupLabel: PERMISSION_GROUPS.SHIPPER.label,
         order: 398,
     },
 
@@ -495,8 +495,8 @@ const BASE_PERMISSION_META = Object.freeze({
         resource: "order",
         action: "shipper_deliver",
         label: "SHIPPER: Xác nhận đã giao",
-        groupKey: PERMISSION_GROUPS.ORDERS.key,
-        groupLabel: PERMISSION_GROUPS.ORDERS.label,
+        groupKey: PERMISSION_GROUPS.SHIPPER.key,
+        groupLabel: PERMISSION_GROUPS.SHIPPER.label,
         order: 399,
     },
 
@@ -505,8 +505,8 @@ const BASE_PERMISSION_META = Object.freeze({
         resource: "order",
         action: "shipper_cancel",
         label: "SHIPPER: Hủy đơn đang giao",
-        groupKey: PERMISSION_GROUPS.ORDERS.key,
-        groupLabel: PERMISSION_GROUPS.ORDERS.label,
+        groupKey: PERMISSION_GROUPS.SHIPPER.key,
+        groupLabel: PERMISSION_GROUPS.SHIPPER.label,
         order: 400,
     },
 
@@ -641,8 +641,15 @@ const BASE_PERMISSION_META = Object.freeze({
         groupLabel: PERMISSION_GROUPS.SYSTEM.label,
         order: 1020,
     },
-
-
+    [PERMISSIONS.AUDIT_PAYMENT_READ]: {
+        key: PERMISSIONS.AUDIT_PAYMENT_READ,
+        resource: "audit",
+        action: "payment_read",
+        label: "Xem lịch sử thanh toán",
+        groupKey: PERMISSION_GROUPS.AUDIT.key,
+        groupLabel: PERMISSION_GROUPS.AUDIT.label,
+        order: 1030,
+    },
 });
 
 //merge audit meta
@@ -665,11 +672,11 @@ const BASE_ADMIN_SCREENS = Object.freeze({
   public: false,
   accessAny: [
     PERMISSIONS.ORDER_DASHBOARD_READ,
-    PERMISSIONS.ORDER_DASHBOARD_REBUILD, // ✅ thêm (tuỳ bạn: có thể không thêm nếu chỉ dùng cho nút)
+    PERMISSIONS.ORDER_DASHBOARD_REBUILD, //  thêm (tuỳ bạn: có thể không thêm nếu chỉ dùng cho nút)
   ],
   actions: {
     view: [PERMISSIONS.ORDER_DASHBOARD_READ],
-    rebuild: [PERMISSIONS.ORDER_DASHBOARD_REBUILD], // ✅ thêm action này
+    rebuild: [PERMISSIONS.ORDER_DASHBOARD_REBUILD], //  thêm action này
   },
 },
 
@@ -805,7 +812,6 @@ const BASE_ADMIN_SCREENS = Object.freeze({
     },
 
 
-
     ORDERS: {
         key: "order",
         group: PERMISSION_GROUPS.ORDERS.key,
@@ -828,9 +834,11 @@ const BASE_ADMIN_SCREENS = Object.freeze({
             changeStatus: [PERMISSIONS.ORDER_UPDATE_STATUS],
         },
     },
+
+    // ===== STAFF =====
     ORDERS_INBOX: {
         key: "order-inbox",
-        group: PERMISSION_GROUPS.ORDERS.key,
+        group: PERMISSION_GROUPS.STAFF.key,
         label: "Staff Inbox (claim đơn)",
         icon: "order", // quan trọng: sidebar ICON map của bạn có "order"
         order: 41,
@@ -847,7 +855,7 @@ const BASE_ADMIN_SCREENS = Object.freeze({
 
     MY_STAFF_ORDERS: {
         key: "my-staff-orders",
-        group: PERMISSION_GROUPS.ORDERS.key,
+        group: PERMISSION_GROUPS.STAFF.key,
         label: "Đơn của tôi",
         icon: "order",
         order: 42,
@@ -858,10 +866,10 @@ const BASE_ADMIN_SCREENS = Object.freeze({
         },
     },
 
-    // ===== ORDERS (SHIPPER) =====
+    // ===== SHIPPER =====
     SHIPPER_INBOX: {
         key: "shipper-inbox",
-        group: PERMISSION_GROUPS.ORDERS.key,
+        group: PERMISSION_GROUPS.SHIPPER.key,
         label: "Shipper Inbox (nhận đơn)",
         icon: "order",
         order: 43,
@@ -878,7 +886,7 @@ const BASE_ADMIN_SCREENS = Object.freeze({
 
     MY_SHIPPER_ORDERS: {
         key: "my-shipper-orders",
-        group: PERMISSION_GROUPS.ORDERS.key,
+        group: PERMISSION_GROUPS.SHIPPER.key,
         label: "Đơn tôi đang giao",
         icon: "order",
         order: 44,
@@ -911,11 +919,18 @@ const BASE_ADMIN_SCREENS = Object.freeze({
                 accessAny: [PERMISSIONS.AUDIT_SECURITY_READ],
             },
             {
-                key: "audit-user",
+                key: "audit-user", 
                 label: "Lịch sử người dùng",
                 routes: ["/admin/audit/user"],
                 accessAny: [PERMISSIONS.AUDIT_READ],
             },
+            {
+                key: "audit-payment",
+                label: "Lịch sử thanh toán",
+                routes: ["/admin/audit/payment"],
+                accessAny: [PERMISSIONS.AUDIT_PAYMENT_READ],
+            },
+
         ],
 
     },

@@ -184,12 +184,12 @@ exports.setRolePermissions = async (roleCode, permissions = []) => {
     }
 
     // 🔒 khóa ADMIN
-    if (roleCode.trim().toUpperCase() === "ADMIN") {
-        throw new ApiError(
-            httpStatus.FORBIDDEN,
-            "Không được chỉnh quyền của ADMIN"
-        );
-    }
+    // if (roleCode.trim().toUpperCase() === "ADMIN") {
+    //     throw new ApiError(
+    //         httpStatus.FORBIDDEN,
+    //         "Không được chỉnh quyền của ADMIN"
+    //     );
+    // }
 
     if (!Array.isArray(permissions)) {
         throw new ApiError(
